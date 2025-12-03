@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+x:Class="lab3json.Views.AboutPage"
+Title="��� �������">
+
+    <VerticalStackLayout Padding="10" Spacing="15">
+        <Label Text="��������: ��������� JSON (����������)" FontSize="20" FontAttributes="Bold"/>
+        <Label Text="�������: ̳���� ������ ���㳿���" />
+        <Label Text="����: 2" />
+        <Label Text="�����: �-24" />
+        <Label Text="г�: 2025" />
+        <Button Text="�����" 
+                WidthRequest="150" 
+                HeightRequest="50" 
+                HorizontalOptions="Start" 
+                Clicked="OnBackClicked"/>
+  </VerticalStackLayout>
+</ContentPage>

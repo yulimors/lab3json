@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+x:Class="lab3json.Views.AddEditStudentPage"
+Title="�������">
+
+    <VerticalStackLayout Padding="10" Spacing="15">
+        <Entry x:Name="NameEntry" Placeholder="ϲ�" />
+        <Entry x:Name="FacultyEntry" Placeholder="���������" />
+        <Entry x:Name="DeptEntry" Placeholder="�������" />
+        <Entry x:Name="CourseEntry" Placeholder="����" />
+
+        <Button Text="��������" Clicked="OnSaveClicked"/>
+        <Button Text="�����" Clicked="OnBackClicked"/>
+    </VerticalStackLayout>
+
+</ContentPage>

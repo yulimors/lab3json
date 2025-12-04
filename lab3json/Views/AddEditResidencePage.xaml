@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-x:Class="lab3json.Views.AddEditResidencePage"
-Title="ʳ�����">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="lab3json.Views.AddEditResidencePage"
+             Title="Поселення">
 
     <VerticalStackLayout Padding="10" Spacing="15">
-        <Entry x:Name="RoomEntry" Placeholder="����� ������" />
-        <Entry x:Name="StudentNameEntry" Placeholder="ϲ� ��������" />
-        <Entry x:Name="DateEntry" Placeholder="���� ���������" />
-        <Entry x:Name="NotesEntry" Placeholder="�������" />
-        <Button Text="��������" Clicked="OnSaveClicked"/>
-        <Button Text="�����" Clicked="OnBackClicked"/>
-    </VerticalStackLayout>
+        <Label Text="Дані про кімнату:" FontSize="16" FontAttributes="Bold" Margin="0,0,0,10"/>
 
+        <Entry x:Name="RoomEntry" Placeholder="Номер кімнати (напр. 101)" Keyboard="Numeric" />
+
+        <Label Text="Оберіть студента:" FontSize="12" TextColor="Gray" Margin="0,0,0,-10"/>
+        <Picker x:Name="StudentPicker" Title="-- Натисніть для вибору --" />
+
+        <Entry x:Name="NotesEntry" Placeholder="Телефон (0951234567)" Keyboard="Telephone" />
+
+        <Button Text="Зберегти" Clicked="OnSaveClicked" Margin="0,20,0,0"/>
+        <Button Text="Назад" Clicked="OnBackClicked"/>
+    </VerticalStackLayout>
 </ContentPage>

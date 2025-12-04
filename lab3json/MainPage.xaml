@@ -1,21 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-xmlns:viewmodels="clr-namespace:lab3json.ViewModels"
-x:Class="lab3json.Views.MainPage"
-Title="Диспетчер Гуртожитку">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:lab3json.ViewModels"
+             x:Class="lab3json.Views.MainPage"
+             Title="Диспетчер Гуртожитку">
+
     <ContentPage.BindingContext>
         <viewmodels:MainViewModel/>
     </ContentPage.BindingContext>
+
     <ScrollView>
         <VerticalStackLayout Padding="10" Spacing="10">
+
             <Button Text="Відкрити JSON" Command="{Binding LoadCommand}" BackgroundColor="#512BD4"/>
-            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                <Entry Placeholder="Пошук..." Text="{Binding SearchText}" WidthRequest="200"/>
-                <Picker Title="Критерій" ItemsSource="{Binding SearchCriteria}" SelectedItem="{Binding SelectedSearchCriterion}" WidthRequest="150"/>
-                <Button Text="Знайти" Command="{Binding SearchCommand}"/>
-            </HorizontalStackLayout>
+
+            <Grid ColumnDefinitions="*, 160, Auto" ColumnSpacing="8" VerticalOptions="Center">
+                <Entry Grid.Column="0" 
+                       Placeholder="Пошук..." 
+                       Text="{Binding SearchText}" />
+
+                <Picker Grid.Column="1" 
+                        Title="Критерій" 
+                        ItemsSource="{Binding SearchCriteria}" 
+                        SelectedItem="{Binding SelectedSearchCriterion}" />
+
+                <Button Grid.Column="2" 
+                        Text="Знайти" 
+                        Command="{Binding SearchCommand}" 
+                        IsEnabled="{Binding IsFileLoaded}"/>
+            </Grid>
+
             <Label Text="{Binding SearchResultText}" FontAttributes="Italic" TextColor="Gray"/>
+
             <Label Text="Проживання:" FontAttributes="Bold" FontSize="18" Margin="0,10,0,0"/>
             <CollectionView ItemsSource="{Binding Residences}" SelectionMode="Single" SelectedItem="{Binding SelectedResidence}" HeightRequest="200">
                 <CollectionView.ItemsLayout>
@@ -48,11 +64,13 @@ Title="Диспетчер Гуртожитку">
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
             <HorizontalStackLayout Spacing="5">
-                <Button Text="+" Clicked="OnAddResidenceClicked" WidthRequest="40"/>
-                <Button Text="Ред." Clicked="OnEditResidenceClicked"/>
-                <Button Text="Вид." Clicked="OnDeleteResidenceClicked" BackgroundColor="#8B0000"/>
+                <Button Text="+" Clicked="OnAddResidenceClicked" WidthRequest="40" IsEnabled="{Binding IsFileLoaded}"/>
+                <Button Text="Ред." Clicked="OnEditResidenceClicked" IsEnabled="{Binding IsFileLoaded}"/>
+                <Button Text="Вид." Clicked="OnDeleteResidenceClicked" BackgroundColor="#8B0000" IsEnabled="{Binding IsFileLoaded}"/>
             </HorizontalStackLayout>
+
             <Label Text="Студенти:" FontAttributes="Bold" FontSize="18" Margin="0,20,0,0"/>
             <CollectionView ItemsSource="{Binding Students}" SelectionMode="Single" SelectedItem="{Binding SelectedStudent}" HeightRequest="200">
                 <CollectionView.ItemsLayout>
@@ -85,16 +103,20 @@ Title="Диспетчер Гуртожитку">
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
             <HorizontalStackLayout Spacing="5">
-                <Button Text="+" Clicked="OnAddStudentClicked" WidthRequest="40"/>
-                <Button Text="Ред." Clicked="OnEditStudentClicked"/>
-                <Button Text="Вид." Clicked="OnDeleteStudentClicked" BackgroundColor="#8B0000"/>
+                <Button Text="+" Clicked="OnAddStudentClicked" WidthRequest="40" IsEnabled="{Binding IsFileLoaded}"/>
+                <Button Text="Ред." Clicked="OnEditStudentClicked" IsEnabled="{Binding IsFileLoaded}"/>
+                <Button Text="Вид." Clicked="OnDeleteStudentClicked" BackgroundColor="#8B0000" IsEnabled="{Binding IsFileLoaded}"/>
             </HorizontalStackLayout>
+
             <BoxView HeightRequest="1" Color="Gray" Margin="0,15"/>
+
             <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                <Button Text="ЗБЕРЕГТИ" Command="{Binding SaveCommand}" BackgroundColor="Green"/>
+                <Button Text="ЗБЕРЕГТИ" Command="{Binding SaveCommand}" BackgroundColor="Green" IsEnabled="{Binding IsFileLoaded}"/>
                 <Button Text="Про програму" Clicked="OnAboutClicked" BackgroundColor="Gray"/>
             </HorizontalStackLayout>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

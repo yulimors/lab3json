@@ -13,6 +13,7 @@ public partial class MainPage : ContentPage
         InitializeComponent();
     }
 
+    // Проживання
     private async void OnAddResidenceClicked(object sender, EventArgs e)
     {
         await Shell.Current.Navigation.PushAsync(new AddEditResidencePage(_vm));
@@ -20,19 +21,23 @@ public partial class MainPage : ContentPage
 
     private async void OnEditResidenceClicked(object sender, EventArgs e)
     {
-        if (_vm.SelectedResidence == null) { await DisplayAlert("!", "Оберіть запис", "OK"); return; }
+        if (_vm.SelectedResidence == null) { await DisplayAlert("Увага", "Оберіть запис", "OK"); return; }
         await Shell.Current.Navigation.PushAsync(new AddEditResidencePage(_vm, _vm.SelectedResidence));
     }
 
     private async void OnDeleteResidenceClicked(object sender, EventArgs e)
     {
-        if (_vm.SelectedResidence != null && await DisplayAlert("Видалити?", "Видалити?", "Так", "Ні"))
+        if (_vm.SelectedResidence != null)
         {
-            _vm.RemoveResidence(_vm.SelectedResidence);
-            _vm.SelectedResidence = null;
+            if (await DisplayAlert("Видалити?", "Видалити цей запис?", "Так", "Ні"))
+            {
+                _vm.RemoveResidence(_vm.SelectedResidence);
+                _vm.SelectedResidence = null;
+            }
         }
     }
 
+    // Студенти
     private async void OnAddStudentClicked(object sender, EventArgs e)
     {
         await Shell.Current.Navigation.PushAsync(new AddEditStudentPage(_vm));
@@ -40,16 +45,19 @@ public partial class MainPage : ContentPage
 
     private async void OnEditStudentClicked(object sender, EventArgs e)
     {
-        if (_vm.SelectedStudent == null) { await DisplayAlert("!", "Оберіть студента", "OK"); return; }
+        if (_vm.SelectedStudent == null) { await DisplayAlert("Увага", "Оберіть студента", "OK"); return; }
         await Shell.Current.Navigation.PushAsync(new AddEditStudentPage(_vm, _vm.SelectedStudent));
     }
 
     private async void OnDeleteStudentClicked(object sender, EventArgs e)
     {
-        if (_vm.SelectedStudent != null && await DisplayAlert("Видалити?", "Видалити?", "Так", "Ні"))
+        if (_vm.SelectedStudent != null)
         {
-            _vm.RemoveStudent(_vm.SelectedStudent);
-            _vm.SelectedStudent = null;
+            if (await DisplayAlert("Видалити?", "Видалити студента? (Це видалить його і з кімнати)", "Так", "Ні"))
+            {
+                _vm.RemoveStudent(_vm.SelectedStudent);
+                _vm.SelectedStudent = null;
+            }
         }
     }
 

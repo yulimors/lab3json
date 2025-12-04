@@ -51,11 +51,16 @@ public static class JsonService
 
     public static async Task SaveDormitoryAsync(Dormitory dormitory, string path)
     {
-        var json = JsonSerializer.Serialize(dormitory, new JsonSerializerOptions
+        var options = new JsonSerializerOptions
         {
-            WriteIndented = true
-        });
+            WriteIndented = true,
+       
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Create(
+                System.Text.Unicode.UnicodeRanges.BasicLatin,
+                System.Text.Unicode.UnicodeRanges.Cyrillic)
+        };
 
+        var json = JsonSerializer.Serialize(dormitory, options);
         await File.WriteAllTextAsync(path, json);
     }
 }

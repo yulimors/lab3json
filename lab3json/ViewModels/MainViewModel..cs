@@ -11,6 +11,19 @@ public class MainViewModel : BindableObject
 {
     private Dormitory _dormitory = new();
 
+    // --- ГОЛОВНА ЗМІНА: Прапорець для блокування кнопок ---
+    private bool _isFileLoaded;
+    public bool IsFileLoaded
+    {
+        get => _isFileLoaded;
+        set
+        {
+            _isFileLoaded = value;
+            OnPropertyChanged(); // Повідомляє інтерфейс, що треба увімкнути/вимкнути кнопки
+        }
+    }
+    // -----------------------------------------------------
+
     public ObservableCollection<Residence> Residences { get; set; } = new();
     public ObservableCollection<Student> Students { get; set; } = new();
 
@@ -65,6 +78,9 @@ public class MainViewModel : BindableObject
         SaveCommand = new Command(async () => await SaveData());
         SearchCommand = new Command(SearchAll);
         SelectedSearchCriterion = "Всі поля";
+
+        // НА СТАРТІ КНОПКИ МАЮТЬ БУТИ ЗАБЛОКОВАНІ
+        IsFileLoaded = false;
     }
 
     private string _currentFilePath;
@@ -72,7 +88,7 @@ public class MainViewModel : BindableObject
     private async Task LoadData()
     {
         var path = await JsonService.PickFileAsync();
-        if (path == null) return;
+        if (path == null) return; // Якщо файл не вибрали - виходимо, кнопки лишаються заблоковані
 
         _currentFilePath = path;
         var loaded = await JsonService.LoadDormitoryAsync(path);
@@ -86,6 +102,9 @@ public class MainViewModel : BindableObject
         foreach (var s in _dormitory.Students) Students.Add(s);
 
         SearchResultText = $"Завантажено: {_dormitory.Residences.Count} записів, {_dormitory.Students.Count} студентів";
+
+        // ТІЛЬКИ ТУТ ВМИКАЄМО КНОПКИ
+        IsFileLoaded = true;
     }
 
     private async Task SaveData()
@@ -102,6 +121,9 @@ public class MainViewModel : BindableObject
 
     private void SearchAll()
     {
+        // Якщо файл не завантажено, шукати нічого
+        if (!IsFileLoaded) return;
+
         Residences.Clear();
         Students.Clear();
 
@@ -175,6 +197,18 @@ public class MainViewModel : BindableObject
     }
     public void RemoveStudent(Student st)
     {
+        // 1. Спочатку шукаємо, чи закріплена за цим студентом кімната
+        // Шукаємо в списку Residences запис, де ім'я збігається з ім'ям студента
+        var residenceToDelete = Residences.FirstOrDefault(r => r.StudentNameRef == st.FullName);
+
+        // 2. Якщо такий запис знайшовся - видаляємо його
+        if (residenceToDelete != null)
+        {
+            _dormitory.Residences.Remove(residenceToDelete);
+            Residences.Remove(residenceToDelete);
+        }
+
+        // 3. Тепер спокійно видаляємо самого студента
         _dormitory.Students.Remove(st);
         Students.Remove(st);
     }

@@ -52,7 +52,7 @@ public partial class AddEditResidencePage : ContentPage
         // 1. Чи обрано студента?
         if (StudentPicker.SelectedIndex == -1)
         {
-            await DisplayAlert("Помилка", "Ви не обрали студента!", "OK");
+            await DisplayAlert("Помилка", "Ви не обрали студента!", "Oк");
             return;
         }
         string selectedStudent = StudentPicker.SelectedItem.ToString();
@@ -60,14 +60,14 @@ public partial class AddEditResidencePage : ContentPage
         // 2. Номер кімнати (число > 0)
         if (!int.TryParse(roomStr, out int roomNum) || roomNum <= 0)
         {
-            await DisplayAlert("Помилка", "Номер кімнати має бути числом більше 0!", "OK");
+            await DisplayAlert("Помилка", "Номер кімнати повинен бути більше 0!", "Oк");
             return;
         }
 
         // 3. Телефон (рівно 10 цифр)
         if (!Regex.IsMatch(phoneStr, @"^\d{10}$"))
         {
-            await DisplayAlert("Помилка", "Телефон має містити рівно 10 цифр (наприклад 0991234567)!", "OK");
+            await DisplayAlert("Помилка", "Телефон має містити 10 цифр!", "Oк");
             return;
         }
 
@@ -75,7 +75,7 @@ public partial class AddEditResidencePage : ContentPage
         var duplicate = _vm.Residences.FirstOrDefault(r => r.RoomNumber == roomStr && r.StudentNameRef == selectedStudent);
         if (duplicate != null && duplicate != _editingItem)
         {
-            await DisplayAlert("Дублікат", "Цей студент вже записаний у цю кімнату!", "OK");
+            await DisplayAlert("Помилка", "Цей студент вже записаний у цю кімнату!", "Oк");
             return;
         }
 
@@ -83,7 +83,7 @@ public partial class AddEditResidencePage : ContentPage
         var existingPlace = _vm.Residences.FirstOrDefault(r => r.StudentNameRef == selectedStudent);
         if (existingPlace != null && existingPlace != _editingItem)
         {
-            await DisplayAlert("Помилка", $"Студент вже живе в кімнаті {existingPlace.RoomNumber}! Спочатку виселіть його.", "OK");
+            await DisplayAlert("Помилка", $"Студент вже живе в кімнаті {existingPlace.RoomNumber}! Спочатку виселіть його.", "Oк");
             return;
         }
 
@@ -94,7 +94,7 @@ public partial class AddEditResidencePage : ContentPage
 
         if (peopleInRoom >= MaxCapacity)
         {
-            await DisplayAlert("Увага", $"Кімната {roomStr} переповнена! (Макс {MaxCapacity} чол.)", "OK");
+            await DisplayAlert("Увага", $"Кімната {roomStr} переповнена! (Макс {MaxCapacity} чол.)", "Oк");
             return;
         }
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using System.Linq;
+using System.Linq; // Потрібно для сортування
 using System.Windows.Input;
 using lab3json.Models;
 using lab3json.Services;
@@ -11,18 +11,12 @@ public class MainViewModel : BindableObject
 {
     private Dormitory _dormitory = new();
 
-    // --- ГОЛОВНА ЗМІНА: Прапорець для блокування кнопок ---
     private bool _isFileLoaded;
     public bool IsFileLoaded
     {
         get => _isFileLoaded;
-        set
-        {
-            _isFileLoaded = value;
-            OnPropertyChanged(); // Повідомляє інтерфейс, що треба увімкнути/вимкнути кнопки
-        }
+        set { _isFileLoaded = value; OnPropertyChanged(); }
     }
-    // -----------------------------------------------------
 
     public ObservableCollection<Residence> Residences { get; set; } = new();
     public ObservableCollection<Student> Students { get; set; } = new();
@@ -57,8 +51,7 @@ public class MainViewModel : BindableObject
 
     public ObservableCollection<string> SearchCriteria { get; set; } = new()
     {
-        "Всі поля",
-        "ПІБ", "Факультет", "Курс", "Кімната"
+        "Всі поля", "ПІБ", "Факультет", "Курс", "Кімната"
     };
 
     private string _searchResultText;
@@ -78,8 +71,6 @@ public class MainViewModel : BindableObject
         SaveCommand = new Command(async () => await SaveData());
         SearchCommand = new Command(SearchAll);
         SelectedSearchCriterion = "Всі поля";
-
-        // НА СТАРТІ КНОПКИ МАЮТЬ БУТИ ЗАБЛОКОВАНІ
         IsFileLoaded = false;
     }
 
@@ -87,24 +78,44 @@ public class MainViewModel : BindableObject
 
     private async Task LoadData()
     {
-        var path = await JsonService.PickFileAsync();
-        if (path == null) return; // Якщо файл не вибрали - виходимо, кнопки лишаються заблоковані
+        try
+        {
+            var path = await JsonService.PickFileAsync();
+            if (path == null) return;
 
-        _currentFilePath = path;
-        var loaded = await JsonService.LoadDormitoryAsync(path);
-        if (loaded == null) return;
+            _currentFilePath = path;
+            var loaded = await JsonService.LoadDormitoryAsync(path);
+            if (loaded == null)
+            {
+                await Shell.Current.DisplayAlert("Помилка", "Не вдалося прочитати файл.", "OK");
+                return;
+            }
 
-        _dormitory = loaded;
+            _dormitory = loaded;
 
+            UpdateCollections(_dormitory.Residences, _dormitory.Students);
+
+            SearchResultText = $"Завантажено: {_dormitory.Residences.Count} записів, {_dormitory.Students.Count} студентів";
+            IsFileLoaded = true;
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Помилка", ex.Message, "OK");
+        }
+    }
+
+    // Допоміжний метод для оновлення і СОРТУВАННЯ списків
+    private void UpdateCollections(IEnumerable<Residence> resData, IEnumerable<Student> studData)
+    {
         Residences.Clear();
+        // Сортування кімнат: Спочатку за довжиною (щоб 2 було перед 10), потім за номером
+        var sortedResidences = resData.OrderBy(r => r.RoomNumber.Length).ThenBy(r => r.RoomNumber);
+        foreach (var r in sortedResidences) Residences.Add(r);
+
         Students.Clear();
-        foreach (var r in _dormitory.Residences) Residences.Add(r);
-        foreach (var s in _dormitory.Students) Students.Add(s);
-
-        SearchResultText = $"Завантажено: {_dormitory.Residences.Count} записів, {_dormitory.Students.Count} студентів";
-
-        // ТІЛЬКИ ТУТ ВМИКАЄМО КНОПКИ
-        IsFileLoaded = true;
+        // Сортування студентів: За алфавітом
+        var sortedStudents = studData.OrderBy(s => s.FullName);
+        foreach (var s in sortedStudents) Students.Add(s);
     }
 
     private async Task SaveData()
@@ -114,57 +125,58 @@ public class MainViewModel : BindableObject
             await Shell.Current.DisplayAlert("Помилка", "Спершу відкрийте файл JSON", "OK");
             return;
         }
-
-        await JsonService.SaveDormitoryAsync(_dormitory, _currentFilePath);
-        await Shell.Current.DisplayAlert("Успіх", "Файл успішно збережений!", "OK");
+        try
+        {
+            await JsonService.SaveDormitoryAsync(_dormitory, _currentFilePath);
+            await Shell.Current.DisplayAlert("Успіх", "Файл збережено!", "OK");
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Помилка", ex.Message, "OK");
+        }
     }
 
     private void SearchAll()
     {
-        // Якщо файл не завантажено, шукати нічого
         if (!IsFileLoaded) return;
 
-        Residences.Clear();
-        Students.Clear();
+        var tempRes = new List<Residence>();
+        var tempStud = new List<Student>();
 
         switch (SelectedSearchCriterion)
         {
             case "Всі поля":
-                foreach (var r in _dormitory.Residences.Where(r =>
+                tempRes.AddRange(_dormitory.Residences.Where(r =>
                     r.RoomNumber.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                    r.StudentNameRef.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
-                    Residences.Add(r);
+                    r.StudentNameRef.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
 
-                foreach (var s in _dormitory.Students.Where(s =>
+                tempStud.AddRange(_dormitory.Students.Where(s =>
                     s.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
                     s.Faculty.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
                     s.Department.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                    s.Course.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
-                    Students.Add(s);
+                    s.Course.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
                 break;
 
             case "ПІБ":
-                foreach (var s in _dormitory.Students.Where(s => s.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
-                    Students.Add(s);
-                foreach (var r in _dormitory.Residences.Where(r => r.StudentNameRef.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
-                    Residences.Add(r);
+                tempStud.AddRange(_dormitory.Students.Where(s => s.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
+                tempRes.AddRange(_dormitory.Residences.Where(r => r.StudentNameRef.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
                 break;
 
             case "Факультет":
-                foreach (var s in _dormitory.Students.Where(s => s.Faculty.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
-                    Students.Add(s);
+                tempStud.AddRange(_dormitory.Students.Where(s => s.Faculty.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
                 break;
 
             case "Курс":
-                foreach (var s in _dormitory.Students.Where(s => s.Course.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
-                    Students.Add(s);
+                tempStud.AddRange(_dormitory.Students.Where(s => s.Course.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
                 break;
 
             case "Кімната":
-                foreach (var r in _dormitory.Residences.Where(r => r.RoomNumber.Contains(SearchText, StringComparison.OrdinalIgnoreCase)))
-                    Residences.Add(r);
+                tempRes.AddRange(_dormitory.Residences.Where(r => r.RoomNumber.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
                 break;
         }
+
+        // Оновлюємо списки з сортуванням
+        UpdateCollections(tempRes.Distinct(), tempStud.Distinct());
 
         SearchResultText = $"Знайдено: {Residences.Count} записів, {Students.Count} студентів";
     }
@@ -172,7 +184,8 @@ public class MainViewModel : BindableObject
     public void AddResidence(Residence res)
     {
         _dormitory.Residences.Add(res);
-        Residences.Add(res);
+        // Перезавантажуємо списки, щоб спрацювало сортування
+        SearchAll();
     }
     public void RemoveResidence(Residence res)
     {
@@ -185,41 +198,45 @@ public class MainViewModel : BindableObject
         if (index >= 0)
         {
             _dormitory.Residences[index] = newRes;
-            int obsIndex = Residences.IndexOf(oldRes);
-            if (obsIndex >= 0) Residences[obsIndex] = newRes;
+            SearchAll(); // Оновлюємо сортування
         }
     }
 
     public void AddStudent(Student st)
     {
         _dormitory.Students.Add(st);
-        Students.Add(st);
+        SearchAll(); // Оновлюємо сортування
     }
     public void RemoveStudent(Student st)
     {
-        // 1. Спочатку шукаємо, чи закріплена за цим студентом кімната
-        // Шукаємо в списку Residences запис, де ім'я збігається з ім'ям студента
         var residenceToDelete = Residences.FirstOrDefault(r => r.StudentNameRef == st.FullName);
-
-        // 2. Якщо такий запис знайшовся - видаляємо його
         if (residenceToDelete != null)
         {
             _dormitory.Residences.Remove(residenceToDelete);
             Residences.Remove(residenceToDelete);
         }
-
-        // 3. Тепер спокійно видаляємо самого студента
         _dormitory.Students.Remove(st);
         Students.Remove(st);
     }
     public void UpdateStudent(Student oldSt, Student newSt)
     {
+        string oldName = oldSt.FullName;
+        string newName = newSt.FullName;
+
+        if (oldName != newName)
+        {
+            var residencesToUpdate = _dormitory.Residences.Where(r => r.StudentNameRef == oldName).ToList();
+            foreach (var res in residencesToUpdate)
+            {
+                res.StudentNameRef = newName;
+            }
+        }
+
         int index = _dormitory.Students.IndexOf(oldSt);
         if (index >= 0)
         {
             _dormitory.Students[index] = newSt;
-            int obsIndex = Students.IndexOf(oldSt);
-            if (obsIndex >= 0) Students[obsIndex] = newSt;
+            SearchAll(); // Оновлюємо сортування
         }
     }
 }

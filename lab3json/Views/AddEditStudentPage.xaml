@@ -7,9 +7,9 @@
     <VerticalStackLayout Padding="10" Spacing="15">
         <Label Text="Введіть дані студента:" FontSize="16" FontAttributes="Bold" Margin="0,0,0,10"/>
 
-        <Entry x:Name="NameEntry" Placeholder="ПІБ (Прізвище Ім'я По-батькові)" />
+        <Entry x:Name="NameEntry" Placeholder="ПІБ" />
 
-        <Entry x:Name="FacultyEntry" Placeholder="Факультет (напр. ФІТ)" />
+        <Entry x:Name="FacultyEntry" Placeholder="Факультет" />
 
         <Entry x:Name="DeptEntry" Placeholder="Кафедра" />
 

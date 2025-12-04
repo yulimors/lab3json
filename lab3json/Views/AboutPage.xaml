@@ -10,11 +10,11 @@ Title="Про програму">
         <Label Text="Морозовської Юлії" />
         <Label Text="групи К-24" />
         <Label Text="2025" />
-        <Button Text="Опис:" />
-        <Button Text="Програма для керування поселенням в гуртожиток" 
-                WidthRequest="150" 
-                HeightRequest="50" 
-                HorizontalOptions="Start" 
-                Clicked="OnBackClicked"/>
+        <Label Text="Програма для керування поселенням в гуртожиток" />
+        <Button Text="Назад" 
+                Clicked="OnBackClicked" 
+                WidthRequest="120" 
+                HorizontalOptions="Center" 
+                Margin="0,30,0,0"/>
   </VerticalStackLayout>
 </ContentPage>

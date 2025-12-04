@@ -47,34 +47,34 @@ public partial class AddEditStudentPage : ContentPage
         // 1. ПІБ
         if (string.IsNullOrWhiteSpace(pib))
         {
-            await DisplayAlert("Помилка", "Введіть ПІБ!", "OK");
+            await DisplayAlert("Помилка", "Введіть ПІБ!", "Oк");
             return;
         }
 
         var parts = pib.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length != 3)
         {
-            await DisplayAlert("Помилка", "ПІБ має складатися з 3 слів (Прізвище Ім'я По-батькові)!", "OK");
+            await DisplayAlert("Помилка", "ПІБ має складатися з 3 слів!", "Oк");
             return;
         }
 
         if (Regex.IsMatch(pib, @"\d"))
         {
-            await DisplayAlert("Помилка", "В імені не може бути цифр!", "OK");
+            await DisplayAlert("Помилка", "В імені не може бути цифр!", "Oк");
             return;
         }
 
         // 2. Факультет
         if (string.IsNullOrWhiteSpace(faculty))
         {
-            await DisplayAlert("Помилка", "Введіть назву факультету!", "OK");
+            await DisplayAlert("Помилка", "Введіть назву факультету!", "Oк");
             return;
         }
 
         // 3. Курс
         if (string.IsNullOrEmpty(course))
         {
-            await DisplayAlert("Помилка", "Оберіть курс!", "OK");
+            await DisplayAlert("Помилка", "Оберіть курс!", "Oк");
             return;
         }
 
@@ -82,7 +82,7 @@ public partial class AddEditStudentPage : ContentPage
         var duplicate = _vm.Students.FirstOrDefault(s => s.FullName.Equals(pib, StringComparison.OrdinalIgnoreCase));
         if (duplicate != null && duplicate != _editingItem)
         {
-            await DisplayAlert("Помилка", "Студент з таким ПІБ вже існує! Імена мають бути унікальними.", "OK");
+            await DisplayAlert("Помилка", "Студент з таким ПІБ вже існує!", "Oк");
             return;
         }
 

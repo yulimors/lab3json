@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using System.Linq; // Потрібно для сортування
+using System.Linq;
 using System.Windows.Input;
 using lab3json.Models;
 using lab3json.Services;
@@ -51,7 +51,7 @@ public class MainViewModel : BindableObject
 
     public ObservableCollection<string> SearchCriteria { get; set; } = new()
     {
-        "Всі поля", "ПІБ", "Факультет", "Курс", "Кімната"
+        "Все", "ПІБ", "Факультет", "Курс", "Кімната"
     };
 
     private string _searchResultText;
@@ -70,7 +70,7 @@ public class MainViewModel : BindableObject
         LoadCommand = new Command(async () => await LoadData());
         SaveCommand = new Command(async () => await SaveData());
         SearchCommand = new Command(SearchAll);
-        SelectedSearchCriterion = "Всі поля";
+        SelectedSearchCriterion = "Все";
         IsFileLoaded = false;
     }
 
@@ -87,7 +87,7 @@ public class MainViewModel : BindableObject
             var loaded = await JsonService.LoadDormitoryAsync(path);
             if (loaded == null)
             {
-                await Shell.Current.DisplayAlert("Помилка", "Не вдалося прочитати файл.", "OK");
+                await Shell.Current.DisplayAlert("Помилка", "Не вдалося прочитати файл", "Oк");
                 return;
             }
 
@@ -95,7 +95,7 @@ public class MainViewModel : BindableObject
 
             UpdateCollections(_dormitory.Residences, _dormitory.Students);
 
-            SearchResultText = $"Завантажено: {_dormitory.Residences.Count} записів, {_dormitory.Students.Count} студентів";
+            SearchResultText = $"Завантажено {_dormitory.Residences.Count} записів, {_dormitory.Students.Count} студентів";
             IsFileLoaded = true;
         }
         catch (Exception ex)
@@ -104,16 +104,13 @@ public class MainViewModel : BindableObject
         }
     }
 
-    // Допоміжний метод для оновлення і СОРТУВАННЯ списків
     private void UpdateCollections(IEnumerable<Residence> resData, IEnumerable<Student> studData)
     {
         Residences.Clear();
-        // Сортування кімнат: Спочатку за довжиною (щоб 2 було перед 10), потім за номером
         var sortedResidences = resData.OrderBy(r => r.RoomNumber.Length).ThenBy(r => r.RoomNumber);
         foreach (var r in sortedResidences) Residences.Add(r);
 
         Students.Clear();
-        // Сортування студентів: За алфавітом
         var sortedStudents = studData.OrderBy(s => s.FullName);
         foreach (var s in sortedStudents) Students.Add(s);
     }
@@ -184,7 +181,6 @@ public class MainViewModel : BindableObject
     public void AddResidence(Residence res)
     {
         _dormitory.Residences.Add(res);
-        // Перезавантажуємо списки, щоб спрацювало сортування
         SearchAll();
     }
     public void RemoveResidence(Residence res)
@@ -198,14 +194,14 @@ public class MainViewModel : BindableObject
         if (index >= 0)
         {
             _dormitory.Residences[index] = newRes;
-            SearchAll(); // Оновлюємо сортування
+            SearchAll();
         }
     }
 
     public void AddStudent(Student st)
     {
         _dormitory.Students.Add(st);
-        SearchAll(); // Оновлюємо сортування
+        SearchAll();
     }
     public void RemoveStudent(Student st)
     {
@@ -236,7 +232,7 @@ public class MainViewModel : BindableObject
         if (index >= 0)
         {
             _dormitory.Students[index] = newSt;
-            SearchAll(); // Оновлюємо сортування
+            SearchAll();
         }
     }
 }

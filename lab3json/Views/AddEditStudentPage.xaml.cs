@@ -11,7 +11,6 @@ public partial class AddEditStudentPage : ContentPage
     private MainViewModel _vm;
     private Student _editingItem;
 
-    // Курси залишаємо списком, це зручно
     private readonly List<string> _courses = new() { "1", "2", "3", "4", "5", "6", "Інше" };
 
     public AddEditStudentPage(MainViewModel vm, Student item = null)
@@ -20,13 +19,12 @@ public partial class AddEditStudentPage : ContentPage
         _vm = vm;
         _editingItem = item;
 
-        // Наповнюємо тільки список курсів
         foreach (var c in _courses) CoursePicker.Items.Add(c);
 
         if (item != null)
         {
             NameEntry.Text = item.FullName;
-            FacultyEntry.Text = item.Faculty; // Просто вставляємо текст
+            FacultyEntry.Text = item.Faculty;
             DeptEntry.Text = item.Department;
 
             if (_courses.Contains(item.Course)) CoursePicker.SelectedItem = item.Course;
@@ -36,15 +34,11 @@ public partial class AddEditStudentPage : ContentPage
 
     private async void OnSaveClicked(object sender, EventArgs e)
     {
-        // Зчитуємо дані
         string pib = NameEntry.Text?.Trim() ?? "";
-        string faculty = FacultyEntry.Text?.Trim() ?? ""; // Беремо текст з поля
+        string faculty = FacultyEntry.Text?.Trim() ?? ""; 
         string dept = DeptEntry.Text?.Trim() ?? "";
         string course = CoursePicker.SelectedItem?.ToString();
 
-        // --- ВАЛІДАЦІЯ ---
-
-        // 1. ПІБ
         if (string.IsNullOrWhiteSpace(pib))
         {
             await DisplayAlert("Помилка", "Введіть ПІБ!", "Oк");
@@ -64,29 +58,24 @@ public partial class AddEditStudentPage : ContentPage
             return;
         }
 
-        // 2. Факультет
         if (string.IsNullOrWhiteSpace(faculty))
         {
             await DisplayAlert("Помилка", "Введіть назву факультету!", "Oк");
             return;
         }
 
-        // 3. Курс
         if (string.IsNullOrEmpty(course))
         {
             await DisplayAlert("Помилка", "Оберіть курс!", "Oк");
             return;
         }
 
-        // 4. Перевірка на дублікат імені (щоб не ламати поселення)
         var duplicate = _vm.Students.FirstOrDefault(s => s.FullName.Equals(pib, StringComparison.OrdinalIgnoreCase));
         if (duplicate != null && duplicate != _editingItem)
         {
             await DisplayAlert("Помилка", "Студент з таким ПІБ вже існує!", "Oк");
             return;
         }
-
-        // -----------------
 
         var newItem = new Student
         {

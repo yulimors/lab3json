@@ -27,7 +27,7 @@ public static class JsonService
 
             var result = await FilePicker.Default.PickAsync(new PickOptions
             {
-                PickerTitle = "Виберіть JSON файл",
+                PickerTitle = "Оберіть JSON файл",
                 FileTypes = customFileType
             });
 

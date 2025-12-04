@@ -13,11 +13,8 @@ public partial class MainPage : ContentPage
         InitializeComponent();
     }
 
-    // === УПРАВЛІННЯ ПРОЖИВАННЯМ ===
-
     private async void OnAddResidenceClicked(object sender, EventArgs e)
     {
-        // Перевірка: чи завантажено файл
         if (!_vm.IsFileLoaded)
         {
             await DisplayAlert("Помилка", "Будь ласка, спочатку відкрийте файл JSON!", "OK");
@@ -64,8 +61,6 @@ public partial class MainPage : ContentPage
             await DisplayAlert("Увага", "Оберіть запис для видалення", "OK");
         }
     }
-
-    // === УПРАВЛІННЯ СТУДЕНТАМИ ===
 
     private async void OnAddStudentClicked(object sender, EventArgs e)
     {
@@ -118,7 +113,6 @@ public partial class MainPage : ContentPage
 
     private async void OnAboutClicked(object sender, EventArgs e)
     {
-        // Переходимо через маршрут (це активує пункт у меню зліва)
         await Shell.Current.GoToAsync("///AboutPage");
     }
 

@@ -11,7 +11,6 @@ public partial class AboutPage : ContentPage
 
     private async void OnBackClicked(object sender, EventArgs e)
     {
-        // Повертаємося на головну сторінку
         await Shell.Current.GoToAsync("///MainPage");
     }
 }

@@ -1,0 +1,204 @@
+{
+  "Residences": [
+    {
+      "RoomNumber": "234",
+      "StudentNameRef": "Петров Петро Петрович",
+      "CheckInDate": "2024-08-28",
+      "Notes": "0669014985"
+    },
+    {
+      "RoomNumber": "512",
+      "StudentNameRef": "Сидоренко Олексій Павлович",
+      "CheckInDate": "2024-08-29",
+      "Notes": "0631112233"
+    },
+    {
+      "RoomNumber": "405",
+      "StudentNameRef": "Бондар Тарас Сергійович",
+      "CheckInDate": "2024-08-30",
+      "Notes": "0987778899"
+    },
+    {
+      "RoomNumber": "714",
+      "StudentNameRef": "Литвиненко Андрій Вікторович",
+      "CheckInDate": "2024-08-30",
+      "Notes": "0675551234"
+    },
+    {
+      "RoomNumber": "715",
+      "StudentNameRef": "Костюк Павло Сергійович",
+      "CheckInDate": "2024-09-01",
+      "Notes": "0934449876"
+    },
+    {
+      "RoomNumber": "720",
+      "StudentNameRef": "Павленко Арсен Дмитрович",
+      "CheckInDate": "2024-08-27",
+      "Notes": "0501112299"
+    },
+    {
+      "RoomNumber": "509",
+      "StudentNameRef": "Демченко Вікторія Олегівна",
+      "CheckInDate": "2024-08-31",
+      "Notes": "0667773344"
+    },
+    {
+      "RoomNumber": "520",
+      "StudentNameRef": "Мельничук Софія Андріївна",
+      "CheckInDate": "2024-08-25",
+      "Notes": "0998881122"
+    },
+    {
+      "RoomNumber": "501",
+      "StudentNameRef": "Мартиненко Аліна Юріївна",
+      "CheckInDate": "2024-09-02",
+      "Notes": "0639990011"
+    },
+    {
+      "RoomNumber": "304",
+      "StudentNameRef": "Савченко Ірина Володимирівна",
+      "CheckInDate": "2024-08-29",
+      "Notes": "0682223355"
+    },
+    {
+      "RoomNumber": "312",
+      "StudentNameRef": "Яковенко Юлія Олександрівна",
+      "CheckInDate": "2024-08-28",
+      "Notes": "0954446677"
+    },
+    {
+      "RoomNumber": "205",
+      "StudentNameRef": "Ткачук Богдан Миколайович",
+      "CheckInDate": "2024-08-26",
+      "Notes": "0731239876"
+    },
+    {
+      "RoomNumber": "218",
+      "StudentNameRef": "Остапенко Дмитро Ігорович",
+      "CheckInDate": "2024-08-30",
+      "Notes": "0961115599"
+    },
+    {
+      "RoomNumber": "101",
+      "StudentNameRef": "Шевченко Ольга Дмитрівна",
+      "CheckInDate": "2024-09-01",
+      "Notes": "0661114455"
+    }
+  ],
+  "Students": [
+    {
+      "FullName": "Петров Петро Петрович",
+      "Faculty": "ФІТ",
+      "Department": "ІТ",
+      "Course": "4"
+    },
+    {
+      "FullName": "Сидоренко Олексій Павлович",
+      "Faculty": "Мехмат",
+      "Department": "Алгебри",
+      "Course": "4"
+    },
+    {
+      "FullName": "Бондар Тарас Сергійович",
+      "Faculty": "ФКНК",
+      "Department": "ТТП",
+      "Course": "3"
+    },
+    {
+      "FullName": "Литвиненко Андрій Вікторович",
+      "Faculty": "ФІТ",
+      "Department": "Програмної інженерії",
+      "Course": "2"
+    },
+    {
+      "FullName": "Костюк Павло Сергійович",
+      "Faculty": "ФІТ",
+      "Department": "Кібербезпеки",
+      "Course": "1"
+    },
+    {
+      "FullName": "Павленко Арсен Дмитрович",
+      "Faculty": "ФІТ",
+      "Department": "Мережевих технологій",
+      "Course": "4"
+    },
+    {
+      "FullName": "Демченко Вікторія Олегівна",
+      "Faculty": "Мехмат",
+      "Department": "Мат. аналізу",
+      "Course": "3"
+    },
+    {
+      "FullName": "Мельничук Софія Андріївна",
+      "Faculty": "Мехмат",
+      "Department": "Теорії ймовірностей",
+      "Course": "5"
+    },
+    {
+      "FullName": "Мартиненко Аліна Юріївна",
+      "Faculty": "Мехмат",
+      "Department": "Геометрії",
+      "Course": "1"
+    },
+    {
+      "FullName": "Савченко Ірина Володимирівна",
+      "Faculty": "ФКНК",
+      "Department": "Системного аналізу",
+      "Course": "2"
+    },
+    {
+      "FullName": "Яковенко Юлія Олександрівна",
+      "Faculty": "ФКНК",
+      "Department": "Штучного інтелекту",
+      "Course": "4"
+    },
+    {
+      "FullName": "Ткачук Богдан Миколайович",
+      "Faculty": "ФРЕКС",
+      "Department": "Наноелектроніки",
+      "Course": "6"
+    },
+    {
+      "FullName": "Остапенко Дмитро Ігорович",
+      "Faculty": "ФРЕКС",
+      "Department": "Квантової радіофізики",
+      "Course": "3"
+    },
+    {
+      "FullName": "Шевченко Ольга Дмитрівна",
+      "Faculty": "ФІТ",
+      "Department": "",
+      "Course": "2"
+    },
+    {
+      "FullName": "Ковальчук Андрій Васильович",
+      "Faculty": "ФКНК",
+      "Department": "ПЗ",
+      "Course": "3"
+    },
+    {
+      "FullName": "Зінченко Олена Миколаївна",
+      "Faculty": "ФРЕКС",
+      "Department": "Медичної радіофізики",
+      "Course": "1"
+    },
+    {
+      "FullName": "Ткаченко Ігор Володимирович",
+      "Faculty": "Мехмат",
+      "Department": "Механіки",
+      "Course": "2"
+    },
+    {
+      "FullName": "Кравченко Наталія Юріївна",
+      "Faculty": "ФІТ",
+      "Department": "ІПЗ",
+      "Course": "4"
+    },
+    {
+      "FullName": "Мороз Сергій Олександрович",
+      "Faculty": "ФКНК",
+      "Department": "ТТП",
+      "Course": "5"
+    }
+  ]
+}

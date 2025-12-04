@@ -37,6 +37,7 @@ public partial class AddEditResidencePage : ContentPage
             if (!string.IsNullOrEmpty(item.StudentNameRef))
                 StudentPicker.SelectedItem = item.StudentNameRef;
         }
+        StudentPicker.IsEnabled = false;
     }
 
     private async void OnSaveClicked(object sender, EventArgs e)

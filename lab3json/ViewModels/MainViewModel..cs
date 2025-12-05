@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using lab3json.Models;
@@ -137,23 +137,19 @@ public class MainViewModel : BindableObject
     {
         if (!IsFileLoaded) return;
 
+        // Якщо поле пусте — показуємо все
+        if (string.IsNullOrWhiteSpace(SearchText) || SelectedSearchCriterion == "Все")
+        {
+            UpdateCollections(_dormitory.Residences, _dormitory.Students);
+            SearchResultText = $"Відображено всі записи";
+            return;
+        }
+
         var tempRes = new List<Residence>();
         var tempStud = new List<Student>();
 
         switch (SelectedSearchCriterion)
         {
-            case "Всі поля":
-                tempRes.AddRange(_dormitory.Residences.Where(r =>
-                    r.RoomNumber.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                    r.StudentNameRef.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
-
-                tempStud.AddRange(_dormitory.Students.Where(s =>
-                    s.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                    s.Faculty.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                    s.Department.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                    s.Course.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
-                break;
-
             case "ПІБ":
                 tempStud.AddRange(_dormitory.Students.Where(s => s.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
                 tempRes.AddRange(_dormitory.Residences.Where(r => r.StudentNameRef.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
@@ -172,11 +168,11 @@ public class MainViewModel : BindableObject
                 break;
         }
 
-        // Оновлюємо списки з сортуванням
         UpdateCollections(tempRes.Distinct(), tempStud.Distinct());
 
-        SearchResultText = $"Знайдено: {Residences.Count} записів, {Students.Count} студентів";
+        SearchResultText = $"Знайдено: {Residences.Count} проживань, {Students.Count} студентів";
     }
+
 
     public void AddResidence(Residence res)
     {
